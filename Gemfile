@@ -38,6 +38,9 @@ gem 'iso_country_codes'
 # User authentication
 gem 'devise'
 
+# testing the correct user creation (at signup)
+gem 'capybara', "<3.2.0"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
