@@ -1,4 +1,5 @@
 class Hotel < ActiveRecord::Base
+  belongs_to :manager, class_name: User, foreign_key: 'manager_id'
   validates :name, presence: true
   validates :country_code, presence: true
   validates :description, presence: true
