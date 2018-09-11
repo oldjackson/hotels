@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe "User authentication", type: :feature do
   it "creates a well-named user at signup" do
@@ -18,16 +17,12 @@ RSpec.describe "User authentication", type: :feature do
   end
 
   it "allows a known user to log in" do
-    last_User = User.create(
-      first_name: "Peter",
-      last_name: "Pan",
-      email: "pp@neverland.com",
-      password: "xxxxxx"
-    )
+    user = FactoryBot.create(:user)
+    user.save
 
     visit "/users/sign_in"
 
-    fill_in "Email", with: "pp@neverland.com"
+    fill_in "Email", with: user.email
     fill_in "Password", with: "xxxxxx"
 
     click_button "Log in"

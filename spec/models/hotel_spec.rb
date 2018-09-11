@@ -2,11 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Hotel, type: :model do
   subject do
-    Hotel.new(
-      name: "Majestic",
-      country_code: "ch",
-      description: "Luxury accommodation for few"
-    )
+    FactoryBot.create(:hotel)
   end
   it "is valid with valid attributes" do
     expect(subject).to be_valid()

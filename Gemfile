@@ -41,11 +41,19 @@ gem 'devise'
 # testing the correct user creation (at signup)
 gem 'capybara', "<3.2.0"
 
+# Handle user authorizations
+gem "pundit"
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'pry-byebug'
+  # testing
   gem 'rspec-rails'
   gem 'faker'
+  # Object factory for testing
+  gem 'factory_bot_rails'
 end
 
 group :development do
