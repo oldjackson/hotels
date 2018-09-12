@@ -13,7 +13,12 @@ class Api::V1::BaseController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError,   with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
+  before_action :set_locale
+
   private
+  def set_locale
+    I18n.locale = http_accept_language.compatible_language_from(I18n.available_locales) || I18n.default_locale
+  end
 
   def user_not_authorized(exception)
     render json: {

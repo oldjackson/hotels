@@ -47,7 +47,12 @@ gem "pundit"
 # User authentication token management
 gem "simple_token_authentication"
 
+# 'Monetization' of prices
 gem 'money-rails'
+
+# To pick user-preferred language and currency
+gem 'http_accept_language'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
