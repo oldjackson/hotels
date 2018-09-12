@@ -18,8 +18,6 @@ RSpec.describe "User authentication", type: :feature do
 
   it "allows a known user to log in" do
     user = FactoryBot.create(:user)
-    user.save
-
     visit "/users/sign_in"
 
     fill_in "Email", with: user.email

@@ -44,6 +44,8 @@ gem 'capybara', "<3.2.0"
 # Handle user authorizations
 gem "pundit"
 
+# User authentication token management
+gem "simple_token_authentication"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
