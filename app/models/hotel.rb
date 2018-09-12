@@ -9,7 +9,14 @@ class Hotel < ActiveRecord::Base
   validates :average_price, presence: true, :numericality => { :greater_than => 0 }
   validate :manager_is_a_real_user
 
-  monetize :average_price_cents
+  monetize :average_price_cents, with_currency: ->(_hotel){
+      begin
+        hotel_curr = IsoCountryCodes.find(_hotel.country_code).currency
+        hotel_curr.nil? ? Money.default_currency : hotel_curr # Money.default_currency.to_str correctly gives the currency code already
+      rescue
+        Money.default_currency
+      end
+    }
 
   private
 
@@ -28,5 +35,4 @@ class Hotel < ActiveRecord::Base
       errors.add(:manager, "The manager has to be a real user")
     end
   end
-
 end
