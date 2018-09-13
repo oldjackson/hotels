@@ -53,6 +53,9 @@ gem 'money-rails'
 # To pick user-preferred language and currency
 gem 'http_accept_language'
 
+# For the translation of model fields
+gem 'globalize', '~> 5.1.0', git: 'https://github.com/globalize/globalize'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

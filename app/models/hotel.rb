@@ -20,6 +20,8 @@ class Hotel < ActiveRecord::Base
       end
     }
 
+  translates :description, :fallbacks_for_empty_translations => true
+
   private
 
   def country_code_needs_to_be_valid_ISO

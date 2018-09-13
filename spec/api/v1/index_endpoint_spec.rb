@@ -55,5 +55,57 @@ RSpec.describe "Index endpoint" do
         end
       end
     end
+    it "returns hotels with descriptions depending on the locale" do
+      user = FactoryBot.create(:user)
+
+      I18n.locale = :en
+      en_desc = "An exclusive experience right on the Canal Grande"
+      hotel = FactoryBot.create(:hotel, name: "L'Orologio", country_code: "it", manager: user, description: en_desc)
+
+      get "/api/v1/hotels", nil, {
+                              'X-User-Email' => user.email,
+                              'X-User-Token' => user.authentication_token,
+                              'Accept-Language' => "en"
+                            }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["description"]).to eq(en_desc)
+
+      get "/api/v1/hotels", nil, {
+                        'X-User-Email' => user.email,
+                        'X-User-Token' => user.authentication_token,
+                        'Accept-Language' => 'en-UK'
+                      }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["description"]).to eq(en_desc)
+
+      get "/api/v1/hotels", nil, {
+                        'X-User-Email' => user.email,
+                        'X-User-Token' => user.authentication_token,
+                        'Accept-Language' => "en-US"
+                      }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["description"]).to eq(en_desc)
+
+      I18n.locale = :"it-IT"
+      it_desc = "Un'esclusiva esperienza proprio sul Canal Grande"
+      hotel.description = it_desc
+      hotel.save
+
+      get "/api/v1/hotels", nil, {
+                        'X-User-Email' => user.email,
+                        'X-User-Token' => user.authentication_token,
+                        'Accept-Language' => "it-IT"
+                      }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["description"]).to eq(it_desc)
+
+      get "/api/v1/hotels", nil, {
+                        'X-User-Email' => user.email,
+                        'X-User-Token' => user.authentication_token,
+                        'Accept-Language' => "en-US"
+                      }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["description"]).to eq(en_desc)
+    end
   end
 end
