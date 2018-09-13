@@ -33,8 +33,8 @@ RSpec.describe "Index endpoint" do
       end
     end
     it "returns only the hotels managed by the user" do
-      users = Array.new(5){ FactoryBot.create(:user) }
-      hotels = Array.new(20){ FactoryBot.create(:hotel, manager: users.sample) }
+      users = Array.new(10) { FactoryBot.create(:user) }
+      hotels = Array.new(50) { FactoryBot.create(:hotel, manager: users.sample) }
 
       users.each do |u|
         get "/api/v1/hotels", nil, {

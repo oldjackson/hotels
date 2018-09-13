@@ -11,10 +11,12 @@ class Hotel < ActiveRecord::Base
 
   monetize :average_price_cents, with_currency: ->(_hotel){
       begin
-        hotel_curr = IsoCountryCodes.find(_hotel.country_code).currency
-        hotel_curr.nil? ? Money.default_currency : hotel_curr # Money.default_currency.to_str correctly gives the currency code already
+        hotel_curr = IsoCountryCodes.find(_hotel.country_code).currency # may throw because of nil country_code in specs
+        trial_price = Money.new(100,hotel_curr) # may throw because of strange randomly picked countries (e.g. Tuvalu) with currencies unknown to Money
+        # hotel_curr.nil? ? Money.default_currency : hotel_curr
+        hotel_curr
       rescue
-        Money.default_currency
+        Money.default_currency  # Money.default_currency.to_str correctly gives the currency code already
       end
     }
 
