@@ -143,5 +143,22 @@ RSpec.describe "Index endpoint" do
       parsed = JSON.parse(response.body)
       expect(parsed[0]["average_price"]).to eq(Money.new(10_000, "EUR").format(no_cents_if_whole: true))
     end
+
+    it "triggers the increment of the view count" do
+      user = FactoryBot.create(:user)
+
+      FactoryBot.create(:hotel, views_count: 12, manager: user)
+
+      get "/api/v1/hotels", nil, {
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token
+      }
+      get "/api/v1/hotels", nil, {
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token
+      }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["views_count"]).to eq(13)
+    end
   end
 end

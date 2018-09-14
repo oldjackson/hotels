@@ -22,6 +22,11 @@ class Hotel < ActiveRecord::Base
 
   translates :description, fallbacks_for_empty_translations: true
 
+  def incr_view_cnt!
+    self.views_count += 1
+    save
+  end
+
   private
 
   def country_code_needs_to_be_valid_iso
