@@ -8,5 +8,4 @@ MoneyRails.configure do |config|
   config.add_rate "EUR", "GBP", 0.89198
   config.add_rate "GBP", "USD", 1.31134
   config.add_rate "USD", "GBP", 0.76258
-
 end

@@ -1,0 +1,64 @@
+# courtesy Le Wagon
+
+ConditionalAssignment:
+  Enabled: false
+StringLiterals:
+  Enabled: false
+TrailingBlankLines:
+  Enabled: false
+UnusedMethodArgument:
+  Enabled: false
+EmptyLines:
+  Enabled: false
+RedundantReturn:
+  Enabled: false
+SelfAssignment:
+  Enabled: false
+Documentation:
+  Enabled: false
+RegexpLiteral:
+  Enabled: false
+GuardClause:
+  Enabled: false
+WordArray:
+  Enabled: false
+SymbolProc:
+  Enabled: false
+AbcSize:
+  Enabled: false
+MutableConstant:
+  Enabled: false
+SignalException:
+  Enabled: false
+Casecmp:
+  Enabled: false
+CyclomaticComplexity:
+  Enabled: false
+MethodMissingSuper:
+  Enabled: false
+MissingRespondToMissing:
+  Enabled: false
+FrozenStringLiteralComment:
+  Enabled: false
+ClassAndModuleChildren:
+  Enabled: false
+LineLength:
+  Enabled: false
+RedundantBegin:
+  Enabled: false
+SymbolArray:
+  Enabled: false
+ExpandPathArguments:
+  Enabled: false
+BlockLength:
+  Enabled: false
+BracesAroundHashParameters:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - Rakefile
+    - Gemfile
+    - db/schema.rb
+    - bin/**
+    - config/environments/*

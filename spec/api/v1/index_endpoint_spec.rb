@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Index endpoint" do
   it "returns authorization error if no token is provided" do
     user = FactoryBot.create(:user)
-    hotels = Array.new(5){FactoryBot.create(:hotel, manager: user)}
+    5.times { FactoryBot.create(:hotel, manager: user) }
 
     get "/api/v1/hotels"
 
@@ -13,18 +13,18 @@ RSpec.describe "Index endpoint" do
   context "if the user's token is provided" do
     it "returns the list of hotels managed by the user" do
       user = FactoryBot.create(:user)
-      hotels = Array.new(5){FactoryBot.create(:hotel, manager: user)}
+      hotels = Array.new(5) { FactoryBot.create(:hotel, manager: user) }
 
       get "/api/v1/hotels", nil, {
-                                    'X-User-Email' => user.email,
-                                    'X-User-Token' => user.authentication_token
-                                  }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token
+      }
 
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
 
       parsed = JSON.parse(response.body)
-      expect(parsed.is_a? Array).to eq(true)
+      expect(parsed.is_a?(Array)).to eq(true)
 
       expect(parsed.size).to eq(hotels.size)
 
@@ -34,19 +34,19 @@ RSpec.describe "Index endpoint" do
     end
     it "returns only the hotels managed by the user" do
       users = Array.new(10) { FactoryBot.create(:user) }
-      hotels = Array.new(50) { FactoryBot.create(:hotel, manager: users.sample) }
+      50.times { FactoryBot.create(:hotel, manager: users.sample) }
 
       users.each do |u|
         get "/api/v1/hotels", nil, {
-                                      'X-User-Email' => u.email,
-                                      'X-User-Token' => u.authentication_token
-                                    }
+          'X-User-Email' => u.email,
+          'X-User-Token' => u.authentication_token
+        }
 
         expect(response).to have_http_status(:success)
         expect(response.content_type).to eq("application/json")
 
         parsed = JSON.parse(response.body)
-        expect(parsed.is_a? Array).to eq(true)
+        expect(parsed.is_a?(Array)).to eq(true)
 
         expect(parsed.size).to eq(u.hotels.size)
 
@@ -63,26 +63,26 @@ RSpec.describe "Index endpoint" do
       hotel = FactoryBot.create(:hotel, name: "L'Orologio", country_code: "it", manager: user, description: en_desc)
 
       get "/api/v1/hotels", nil, {
-                              'X-User-Email' => user.email,
-                              'X-User-Token' => user.authentication_token,
-                              'Accept-Language' => "en"
-                            }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "en"
+      }
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(en_desc)
 
       get "/api/v1/hotels", nil, {
-                        'X-User-Email' => user.email,
-                        'X-User-Token' => user.authentication_token,
-                        'Accept-Language' => 'en-UK'
-                      }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => 'en-UK'
+      }
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(en_desc)
 
       get "/api/v1/hotels", nil, {
-                        'X-User-Email' => user.email,
-                        'X-User-Token' => user.authentication_token,
-                        'Accept-Language' => "en-US"
-                      }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "en-US"
+      }
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(en_desc)
 
@@ -92,18 +92,18 @@ RSpec.describe "Index endpoint" do
       hotel.save
 
       get "/api/v1/hotels", nil, {
-                        'X-User-Email' => user.email,
-                        'X-User-Token' => user.authentication_token,
-                        'Accept-Language' => "it-IT"
-                      }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "it-IT"
+      }
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(it_desc)
 
       get "/api/v1/hotels", nil, {
-                        'X-User-Email' => user.email,
-                        'X-User-Token' => user.authentication_token,
-                        'Accept-Language' => "en-US"
-                      }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "en-US"
+      }
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(en_desc)
     end
@@ -111,37 +111,37 @@ RSpec.describe "Index endpoint" do
     it "returns hotels prices converted from the original currencies to the one preferred by user" do
       user = FactoryBot.create(:user)
 
-      hotel = FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
+      FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
 
       get "/api/v1/hotels", nil, {
-                              'X-User-Email' => user.email,
-                              'X-User-Token' => user.authentication_token,
-                              'Accept-Language' => "it"
-                            }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "it"
+      }
       parsed = JSON.parse(response.body)
-      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").format(no_cents_if_whole: true))
+      expect(parsed[0]["average_price"]).to eq(Money.new(10_000, "EUR").format(no_cents_if_whole: true))
 
       get "/api/v1/hotels", nil, {
-                              'X-User-Email' => user.email,
-                              'X-User-Token' => user.authentication_token,
-                              'Accept-Language' => "en-US"
-                            }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "en-US"
+      }
       parsed = JSON.parse(response.body)
-      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").exchange_to('USD').format(no_cents_if_whole: true))
+      expect(parsed[0]["average_price"]).to eq(Money.new(10_000, "EUR").exchange_to('USD').format(no_cents_if_whole: true))
     end
 
     it "returns hotels prices in the original currency if there is no available exchange for the preferred one" do
       user = FactoryBot.create(:user)
 
-      hotel = FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
+      FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
 
       get "/api/v1/hotels", nil, {
-                              'X-User-Email' => user.email,
-                              'X-User-Token' => user.authentication_token,
-                              'Accept-Language' => "se"
-                            }
+        'X-User-Email' => user.email,
+        'X-User-Token' => user.authentication_token,
+        'Accept-Language' => "se"
+      }
       parsed = JSON.parse(response.body)
-      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").format(no_cents_if_whole: true))
+      expect(parsed[0]["average_price"]).to eq(Money.new(10_000, "EUR").format(no_cents_if_whole: true))
     end
   end
 end

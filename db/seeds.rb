@@ -8,8 +8,8 @@
 hotel_ccs = ['it', 'gb', 'us', 'xx']
 hotel_glob_descs =
   {
-    'it' => "Per le vostre vacanze fatevi coccolare" ,
-    'gb' => "You will experience terrific holidays" ,
+    'it' => "Per le vostre vacanze fatevi coccolare",
+    'gb' => "You will experience terrific holidays",
     'us' => "Come and get treated properly during your vacations"
   }
 plain_desc = "A boring description in a generic language translated in English"
@@ -19,7 +19,7 @@ users = Array.new(10) { FactoryBot.create(:user) }
   cc = hotel_ccs.sample
 
 
-  if cc =='xx'
+  if cc == 'xx'
     I18n.locale = :en
     FactoryBot.create(:hotel, description: plain_desc, manager: users.sample)
   else
@@ -34,5 +34,4 @@ users = Array.new(10) { FactoryBot.create(:user) }
     hotel.description = hotel_glob_descs['us']
     hotel.save
   end
-
 end

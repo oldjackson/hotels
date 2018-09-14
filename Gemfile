@@ -65,6 +65,7 @@ group :development, :test do
   gem 'faker'
   # Object factory for testing
   gem 'factory_bot_rails'
+  gem 'rubocop'
 end
 
 group :development do
