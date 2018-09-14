@@ -107,5 +107,41 @@ RSpec.describe "Index endpoint" do
       parsed = JSON.parse(response.body)
       expect(parsed[0]["description"]).to eq(en_desc)
     end
+
+    it "returns hotels prices converted from the original currencies to the one preferred by user" do
+      user = FactoryBot.create(:user)
+
+      hotel = FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
+
+      get "/api/v1/hotels", nil, {
+                              'X-User-Email' => user.email,
+                              'X-User-Token' => user.authentication_token,
+                              'Accept-Language' => "it"
+                            }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").format(no_cents_if_whole: true))
+
+      get "/api/v1/hotels", nil, {
+                              'X-User-Email' => user.email,
+                              'X-User-Token' => user.authentication_token,
+                              'Accept-Language' => "en-US"
+                            }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").exchange_to('USD').format(no_cents_if_whole: true))
+    end
+
+    it "returns hotels prices in the original currency if there is no available exchange for the preferred one" do
+      user = FactoryBot.create(:user)
+
+      hotel = FactoryBot.create(:hotel, country_code: "it", manager: user, average_price: 100)
+
+      get "/api/v1/hotels", nil, {
+                              'X-User-Email' => user.email,
+                              'X-User-Token' => user.authentication_token,
+                              'Accept-Language' => "se"
+                            }
+      parsed = JSON.parse(response.body)
+      expect(parsed[0]["average_price"]).to eq(Money.new(10000,"EUR").format(no_cents_if_whole: true))
+    end
   end
 end
