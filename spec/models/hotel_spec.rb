@@ -23,9 +23,9 @@ RSpec.describe Hotel, type: :model do
     subject.country_code = "zzz"
     expect(subject).to_not be_valid
   end
-  it "is not valid without a description" do
+  it "is valid without a description (may be a missing translation)" do
     subject.description = nil
-    expect(subject).to_not be_valid
+    expect(subject).to be_valid
   end
   it "is created with zero view count" do
     expect(subject.views_count).to eq(0)

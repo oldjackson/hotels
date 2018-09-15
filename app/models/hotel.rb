@@ -2,7 +2,7 @@ class Hotel < ActiveRecord::Base
   belongs_to :manager, class_name: User, foreign_key: 'manager_id'
 
   validates :name, presence: true
-  validates :description, presence: true
+  # validates :description, presence: true  # Can be blank depending on the locale
   validates :country_code, presence: true
   validate :country_code_needs_to_be_valid_iso
   validates :views_count, presence: true, numericality: { greater_than_or_equal_to: 0 }
