@@ -1,13 +1,11 @@
 json.array! @hotels do |h|
-  json.name h.name
-  json.description h.description
-  begin
-    json.average_price humanized_money_with_symbol(h.average_price.exchange_to(t('currency')))
-  rescue Money::Bank::UnknownRate
-    json.average_price humanized_money_with_symbol(h.average_price)
+  present(h) do |h_pres|
+    json.name h_pres.name
+    json.description h_pres.description
+    json.average_price h_pres.average_price
+    json.views_count h_pres.views_count
+    json.id h_pres.id
+    json.country_code h_pres.country_code
+    json.manager h_pres.manager
   end
-  json.views_count h.views_count
-  json.id h.id
-  json.country_code h.country_code
-  json.manager h.manager
 end
